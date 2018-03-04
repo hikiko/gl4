@@ -103,8 +103,6 @@ int main(int argc, char **argv)
 
 int init(void)
 {
-	unsigned int uloc_matrix;
-
 	glDebugMessageCallback(gldebug, 0);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
@@ -147,8 +145,6 @@ int init(void)
 	glGenBuffers(1, &ubo_matrix);
 	glBindBuffer(GL_UNIFORM_BUFFER, ubo_matrix);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof matrix_state, &matrix_state, GL_STREAM_DRAW);
-	uloc_matrix = glGetUniformBlockIndex(sdr, "matrix_state");
-	glUniformBlockBinding(sdr, uloc_matrix, UBLOCK_MATRIX);
 
 	return 0;
 }
@@ -200,7 +196,7 @@ void display(void)
 	draw_mesh(&torus);
 	glBindSampler(0, 0);
 
-	//assert(glGetError() == GL_NO_ERROR);
+	assert(glGetError() == GL_NO_ERROR);
 	glutSwapBuffers();
 }
 
