@@ -42,7 +42,6 @@ struct matrix_state {
 	float lpos[3];
 } __attribute__((packed));
 
-unsigned int sampler;
 unsigned int tex;
 
 int init(void);
@@ -117,10 +116,6 @@ int init(void)
 		return -1;
 	}
 
-	glGenSamplers(1, &sampler);
-	glSamplerParameteri(sampler, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glSamplerParameteri(sampler, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
 	if(gen_torus(&torus, 1.0, 0.25, 32, 12) == -1) {
 		return -1;
 	}
@@ -161,7 +156,6 @@ void cleanup(void)
 		glDeleteVertexArrays(1, &torus.vao);
 	}
 	glDeleteTextures(1, &tex);
-	glDeleteSamplers(1, &sampler);
 }
 
 void display(void)
@@ -192,9 +186,7 @@ void display(void)
 	glBindBufferBase(GL_UNIFORM_BUFFER, UBLOCK_MATRIX, ubo_matrix);
 
 	glBindTexture(GL_TEXTURE_2D, tex);
-	glBindSampler(0, sampler);
 	draw_mesh(&torus);
-	glBindSampler(0, 0);
 
 	assert(glGetError() == GL_NO_ERROR);
 	glutSwapBuffers();
