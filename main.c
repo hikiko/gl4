@@ -130,11 +130,6 @@ int init(void)
 	}
 #endif
 
-	if(link_program(sdr) == -1) {
-		fprintf(stderr, "failed to bind attribute locations\n");
-		return -1;
-	}
-
 	glUseProgram(sdr);
 
 	glGenBuffers(1, &ubo_matrix);
@@ -156,6 +151,7 @@ void cleanup(void)
 		glDeleteVertexArrays(1, &torus.vao);
 	}
 	glDeleteTextures(1, &tex);
+	glDeleteBuffers(1, &ubo_matrix);
 }
 
 void display(void)
@@ -475,6 +471,10 @@ unsigned int load_program(const char *vfname, const char *pfname)
 		glDeleteProgram(prog);
 		return 0;
 	}
+
+	glDetachShader(prog, vs);
+	glDetachShader(prog, ps);
+
 	return prog;
 }
 
